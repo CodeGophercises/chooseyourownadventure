@@ -1,0 +1,18 @@
+<html>
+	<h1>{{.Title}}</h1>
+	<br />
+	<div>
+		{{range .Story}}
+		<p>{{.}}</p>	
+		{{end}}
+	</div>
+	<br /><br />
+	{{ if ne (len .Options) 0}}
+	<h3>Choose your adventure from here on. You have {{len .Options}} option{{if gt (len .Options) 1}}s{{end}}.</h3>
+		<br />
+		{{range .Options}}
+		<a href="/{{.Arc}}">{{.Text}}</a>
+		<br /><br />
+		{{ end }}
+	{{end}}
+<html>
