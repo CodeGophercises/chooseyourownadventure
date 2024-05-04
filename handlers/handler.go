@@ -8,6 +8,16 @@ import (
 	"github.com/jatin-malik/chooseyourownadventure/models"
 )
 
+var chapterTmpl *template.Template
+
+func init() {
+	var err error
+	chapterTmpl, err = template.ParseFiles("templates/chapter.html")
+	if err != nil {
+		log.Fatal("Error parsing chapter template:", err)
+	}
+}
+
 // Story contains n chapters.
 // Each chapter will have a web page in our application.
 // The name of the chapter will be the path to web page.
@@ -20,13 +30,8 @@ type StoryHandler struct {
 func (s *StoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parse request
 	path := r.URL.Path[1:]
-	template, err := template.ParseFiles("templates/chapter.html")
-	if err != nil {
-		log.Fatal("error parsing html file", err.Error())
-	}
-
 	if data, ok := s.ChapterDataMap[path]; ok {
-		template.Execute(w, data)
+		chapterTmpl.Execute(w, data)
 	} else {
 		// redirect to intro
 		http.Redirect(w, r, "/intro", http.StatusSeeOther)
